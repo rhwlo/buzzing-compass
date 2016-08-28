@@ -14,8 +14,8 @@ $(PLATFORMIO): $(VIRTUALENV)
 
 attiny_build: $(PLATFORMIO)
 	git checkout $(ATTINY_BRANCH)
-	$(PLATFORMIO) $(ATTINY_FLAGS)
+	$(PLATFORMIO) run $(ATTINY_FLAGS)
 
 arduino_build: $(PLATFORMIO)
 	git checkout $(UNO_BRANCH)
-	$(PLATFORMIO) $(ARDUINO_FLAGS)
+	$(PLATFORMIO) run $(ARDUINO_FLAGS)
