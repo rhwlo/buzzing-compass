@@ -1,19 +1,18 @@
-#include <TinyWireM.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_LSM303_U.h>
+#include "TinyWireM.h"
+#include "Adafruit_Sensor.h"
+#include "Tiny_Adafruit_LSM303_U.h"
 
 #define BUZZER_Y                    1
 #define BUZZER_Z                    4
 #define BASE_MAGNETIC_STRENGTH      30000 // ms / (radian * µT)
 // ^^ I need to re-assess this one, based off of the ~25 µT measured here.
-#define PI                          3.1416
 #define GRANULARITY                 10 // milliseconds
 
 Adafruit_LSM303_Mag_Concise mag = Adafruit_LSM303_Mag_Concise(12345);
 vector3_t mag_vector;
 
 void pulse_with_intensity(const vector3_t &vec) {
-    uint8_t i, period;
+    uint8_t period;
 
     float abs_mag = sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 
@@ -36,11 +35,21 @@ void setup() {
     pinMode(BUZZER_Z, OUTPUT);
 
     mag.enableAutoRange(true);
-    while (!mag.begin());
+    while (!mag.begin()) {
+        digitalWrite(BUZZER_Y, HIGH);
+        delay(500);
+        digitalWrite(BUZZER_Y, LOW);
+        delay(5000);
+    }
 }
 
 void loop() {
     // to avoid durations that are too long, we keep running mag.getVector until it's true.
-    while (!mag.getVector(&mag_vector));
+    while (!mag.getVector(&mag_vector)) {
+        digitalWrite(BUZZER_Y, HIGH);
+        delay(500);
+        digitalWrite(BUZZER_Y, LOW);
+        delay(5000);
+    }
     pulse_with_intensity(mag_vector);
 }
