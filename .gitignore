@@ -1,2 +1,4 @@
 .pioenvs
 venv
+lib/*
+.travis.yml
